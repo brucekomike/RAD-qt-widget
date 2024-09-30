@@ -1,0 +1,81 @@
+---
+common:
+  install:
+    - "echo 'this is a test yaml file'"
+    - "echo 'which will help you to test your yaml logic'"
+  git:
+  files:
+platforms:
+  ubuntu:
+    x86_64:
+      install:
+        - "echo 'Updating and upgrading packages...'"
+        - "echo 'Installing cmake and gcc...'"
+      git:
+      files:
+      checks:
+        - command: "echo 'Checking git version...'"
+          on_fail:
+            - "echo 'Git not found, installing...'"
+  arch:
+    x86_64:
+      install:
+        - "echo 'Updating system...'"
+        - "echo 'Installing cmake and gcc...'"
+      git:
+      files:
+      checks:
+        - command: "echo 'Checking git version...'"
+          on_fail:
+            - "echo 'Git not found, installing...'"
+  archarm:
+    arm64:
+      install:
+        - "echo 'Updating system...'"
+        - "echo 'Installing cmake and gcc...'"
+      git:
+      files:
+      checks:
+        - command: "exit 1"  # Simulate a failure
+          on_fail:
+            - "echo 'Simulated failure, installing necessary tools...'"
+  nt:
+    x86_64:
+      install:
+        - "echo 'Installing Visual Studio Code...'"
+      git:
+      files: []
+      checks:
+        - command: "echo 'Checking winget...'"
+          on_fail:
+            - "echo 'Winget not found, opening Microsoft Store...'"
+        - command: "echo 'Checking git version...'"
+          on_fail:
+            - "echo 'Git not found, installing...'"
+  darwin:
+    x86_64:
+      install:
+        - "echo 'Updating Homebrew...'"
+        - "echo 'Installing gcc and cmake...'"
+      git: []
+      files: []
+      checks:
+        - command: "echo 'Checking Homebrew version...'"
+          on_fail:
+            - "echo 'Homebrew not found, installing...'"
+        - command: "echo 'Checking git version...'"
+          on_fail:
+            - "echo 'Git not found, installing...'"
+    arm64:
+      install:
+        - "echo 'Updating Homebrew...'"
+        - "echo 'Installing gcc and cmake...'"
+      git: []
+      files: []
+      checks:
+        - command: "echo 'Checking Homebrew version...'"
+          on_fail:
+            - "echo 'Homebrew not found, installing...'"
+        - command: "echo 'Checking git version...'"
+          on_fail:
+            - "echo 'Git not found, installing...'"
