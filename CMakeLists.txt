@@ -17,6 +17,9 @@ set(CMAKE_BUILD_TYPE Debug)
 endif()
 set(EXECUTABLE deploy-cli)
 message(${CMAKE_SYSTEM_PROCESSOR})
+
+set(CUSTOM_PACKAGES)
+
 if(MSYS)
   message("-------------")
   message("MSYS detected")
@@ -39,6 +42,7 @@ if(MINGW)
   if(CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")
     set(EXECUTABLE deploy-cli_mingw_arm64)
   endif()
+  
 endif()
 
 
@@ -50,6 +54,9 @@ if(LINUX AND NOT APPLE)
     set(EXECUTABLE deploy-cli_linux_x64)
   endif()
   set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ ")
+  set(CUSTOM_PACKAGES
+    WaylandClient
+  )
 endif()
 
 
@@ -60,6 +67,8 @@ if(APPLE)
   message("---------------")
   set(CMAKE_C_STANDARD 11)
   set(CMAKE_CXX_STANDARD 17)
+  link_directories("/opt/homebrew/lib")
+  include_directories(/opt/homebrew/include)
   if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
     message(STATUS "Detected x86_64 architecture")
     # x86_64 specific settings here
@@ -86,21 +95,36 @@ endif()
 # use this to fetch external library
 include(FetchContent)
 
-# Fech yaml=cpp
-FetchContent_Declare(
-  yaml-cpp
-  GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
-  GIT_TAG 0.8.0 # Can be a tag (yaml-cpp-x.x.x), a commit hash, or a branch name (master)
-)
-FetchContent_MakeAvailable(yaml-cpp)
+message("finding yaml-cpp ...")
+find_package(yaml-cpp QUIET)
+if(yaml-cpp_FOUND)
+  message("yaml-cpp found")
+else()
+  message("yaml-cpp not found")
+  message("fetching from github...")
+  FetchContent_Declare(
+    yaml-cpp
+    GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
+    GIT_TAG 0.8.0 # Can be a tag (yaml-cpp-x.x.x), a commit hash, or a branch name (master)
+  )
+  FetchContent_MakeAvailable(yaml-cpp)
+endif()
 
+find_package(CLI11 QUIET)
+if(CLI11_FOUND)
+  message("CLI11 found")
+else()
+  message("CLI11 not found")
+  message("fetching from github...")
+  FetchContent_Declare(
+    CLI11
+    GIT_REPOSITORY https://github.com/CLIUtils/CLI11.git
+    GIT_TAG v2.4.2  # Use the latest stable version
+  )
+  FetchContent_MakeAvailable(CLI11)
+  
+endif()
 # Fetch CLI11
-FetchContent_Declare(
-  CLI11
-  GIT_REPOSITORY https://github.com/CLIUtils/CLI11.git
-  GIT_TAG v2.4.2  # Use the latest stable version
-)
-FetchContent_MakeAvailable(CLI11)
 
 
 set(TS_FILES ros-copilot_zh_CN.ts)
@@ -116,7 +140,7 @@ set(PROJECT_SOURCES
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    find_package(Qt6 REQUIRED COMPONENTS WaylandClient)
+    find_package(Qt6 REQUIRED COMPONENTS ${CUSTOM_PACKAGES})
     qt_add_executable(ros-copilot
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
