@@ -31,6 +31,7 @@ jobs:
         msystem: CLANG64
         update: true
         location: C:\
+        release: false
         install: |
           base-devel ${{ env.prefix }}-extra-cmake-modules ${{ env.prefix }}-cmake
           ${{ env.prefix }}-kirigami ${{ env.prefix }}-ki18n ${{ env.prefix }}-kcoreaddons ${{ env.prefix }}-breeze ${{ env.prefix }}-kiconthemes
