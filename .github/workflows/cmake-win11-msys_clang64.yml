@@ -31,11 +31,11 @@ jobs:
         msystem: CLANG64
         update: true
         install: |
-          base-devel $prefix-extra-cmake-modules $prefix-cmake 
-          $prefix-kirigami $prefix-ki18n $prefix-kcoreaddons $prefix-breeze $prefix-kiconthemes 
-          $prefix-qt6-base $prefix-qt6-declarative $prefix-qqc2-desktop-style
-          $prefix-kf6 $prefix-qt6-debug $prefix-qt6
-          $prefix-toolchain
+          base-devel ${{ env.prefix }}-extra-cmake-modules ${{ env.prefix }}-cmake
+          ${{ env.prefix }}-kirigami ${{ env.prefix }}-ki18n ${{ env.prefix }}-kcoreaddons ${{ env.prefix }}-breeze ${{ env.prefix }}-kiconthemes
+          ${{ env.prefix }}-qt6-base ${{ env.prefix }}-qt6-declarative ${{ env.prefix }}-qqc2-desktop-style
+          ${{ env.prefix }}-kf6 ${{ env.prefix }}-qt6-debug ${{ env.prefix }}-qt6
+          ${{ env.prefix }}-toolchain
   
 
     - name: Configure CMake
