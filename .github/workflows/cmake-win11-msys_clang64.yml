@@ -21,20 +21,22 @@ jobs:
     defaults:
       run:
         shell: msys2 {0}
+    env:
+      prefix: "mingw-w64-clang-x86_64"
+      #appendix: "--needed --noconfirm"
     steps:
     - uses: actions/checkout@v4
     - uses: msys2/setup-msys2@v2
       with:
         msystem: CLANG64
-    - name: Set up MSYS2 clang64 environment
-      run: |
-        set MSYSTEM=CLANG64
-        export prefix=mingw-w64-clang-x86_64
-        export appendix="--needed --noconfirm"
-        msys2 -c 'pacman -Syu base-devel $prefix-extra-cmake-modules $prefix-cmake $prefix-kirigami $prefix-ki18n $prefix-kcoreaddons $prefix-breeze $prefix-kiconthemes $prefix-qt6-base $prefix-qt6-declarative $prefix-qqc2-desktop-style $appendix'
-        msys2 -c 'pacman -S $prefix-kf6 $prefix-qt6-debug $prefix-qt6 $appendix'
-        msys2 -c 'pacman -S $prefix-toolchain $appendix'
-        
+        update: true
+        install: |
+          base-devel $prefix-extra-cmake-modules $prefix-cmake 
+          $prefix-kirigami $prefix-ki18n $prefix-kcoreaddons $prefix-breeze $prefix-kiconthemes 
+          $prefix-qt6-base $prefix-qt6-declarative $prefix-qqc2-desktop-style
+          $prefix-kf6 $prefix-qt6-debug $prefix-qt6
+          $prefix-toolchain
+  
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
