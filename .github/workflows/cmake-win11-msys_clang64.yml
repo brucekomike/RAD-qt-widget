@@ -21,9 +21,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - uses: msys2/setup-msys2@v2
+      with:
+        msystem: CLANG64
+        update: true
+        install: git
     - name: Set up MSYS2 environment
       run: |
-        echo 'C:\msys64\clang64\bin\' >> $GITHUB_PATH
         export prefix=mingw-w64-clang-x86_64
         export appendix="--needed --noconfirm"
         pacman -Syu base-devel $prefix-extra-cmake-modules $prefix-cmake $prefix-kirigami $prefix-ki18n $prefix-kcoreaddons $prefix-breeze $prefix-kiconthemes $prefix-qt6-base $prefix-qt6-declarative $prefix-qqc2-desktop-style $appendix
