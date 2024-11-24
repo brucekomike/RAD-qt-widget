@@ -21,7 +21,6 @@ jobs:
     defaults:
       run:
         shell: msys2 {0}
-
     steps:
     - uses: actions/checkout@v4
     - uses: msys2/setup-msys2@v2
@@ -32,9 +31,9 @@ jobs:
         set MSYSTEM=CLANG64
         export prefix=mingw-w64-clang-x86_64
         export appendix="--needed --noconfirm"
-        pacman -Syu base-devel $prefix-extra-cmake-modules $prefix-cmake $prefix-kirigami $prefix-ki18n $prefix-kcoreaddons $prefix-breeze $prefix-kiconthemes $prefix-qt6-base $prefix-qt6-declarative $prefix-qqc2-desktop-style $appendix
-        pacman -S $prefix-kf6 $prefix-qt6-debug $prefix-qt6 $appendix
-        pacman -S $prefix-toolchain $appendix
+        msys2 -c 'pacman -Syu base-devel $prefix-extra-cmake-modules $prefix-cmake $prefix-kirigami $prefix-ki18n $prefix-kcoreaddons $prefix-breeze $prefix-kiconthemes $prefix-qt6-base $prefix-qt6-declarative $prefix-qqc2-desktop-style $appendix'
+        msys2 -c 'pacman -S $prefix-kf6 $prefix-qt6-debug $prefix-qt6 $appendix'
+        msys2 -c 'pacman -S $prefix-toolchain $appendix'
         
 
     - name: Configure CMake
